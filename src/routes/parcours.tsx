@@ -5,28 +5,20 @@ import { Nav } from "../components/Nav";
 import { Footer } from "../components/Footer";
 import { ExplainToggle } from "../components/ExplainToggle";
 import { loadScores, recordLevelResult } from "../lib/scores";
+import { seo } from "../lib/seo";
 import { useLang } from "../lib/i18n";
 import { LEVELS, type Level } from "../data/parcours";
 import { EN_LEVELS } from "../data/en";
 
 export const Route = createFileRoute("/parcours")({
-  head: () => ({
-    meta: [
-      { title: "Parcours progressif : de débutant à expert | model.quest" },
-      {
-        name: "description",
-        content:
-          "4 niveaux déblocables pour apprendre progressivement : le provider, le modèle, l'effort de raisonnement, puis le combo complet. Progression sauvegardée.",
-      },
-      { property: "og:title", content: "Parcours progressif : model.quest" },
-      {
-        property: "og:description",
-        content: "Montez de niveau en niveau et maîtrisez le choix des modèles d'IA.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    seo({
+      path: "/parcours",
+      title: "Parcours progressif : de débutant à expert | model.quest",
+      description:
+        "4 niveaux déblocables pour apprendre progressivement : le provider, le modèle, l'effort de raisonnement, puis le combo complet. Progression sauvegardée.",
+      ogTitle: "Parcours progressif : model.quest",
+    }),
   component: Parcours,
 });
 

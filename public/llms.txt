@@ -1,0 +1,31 @@
+# model.quest
+
+> Jeu interactif bilingue (FR/EN) pour apprendre à choisir le fournisseur, le modèle et l'effort de raisonnement d'une IA. 8 fournisseurs, 23 modèles, prix indicatifs vérifiés le 2026-10-21.
+
+## Pages
+
+- [Quiz](https://model-quest.vercel.app/quiz): 8 scénarios, score maximum 64.
+- [Simulateur](https://model-quest.vercel.app/simulateur): coût mensuel, latence et qualité selon le modèle, l'effort et le volume de tokens.
+- [Parcours](https://model-quest.vercel.app/parcours): 4 niveaux, de débutant à expert.
+- [Guide](https://model-quest.vercel.app/guide): fiches de référence par fournisseur et par modèle.
+- [Classement](https://model-quest.vercel.app/scores): meilleurs scores du quiz.
+- [Code source](https://github.com/gspch/model-quest): MIT, TanStack Start, React 19.
+
+## Catalogue
+
+- OpenAI: GPT-6 Astra, GPT-6.1 Sol, GPT-6 Luna
+- Google (Gemini): Gemini 4 Argon, Gemini 3.8 Flash, Gemini 3.5 Flash-Lite
+- Anthropic (Claude): Claude Fable 5.1, Claude Opus 5.5, Claude Sonnet 5.5, Claude Haiku 5.5
+- DeepSeek: DeepSeek V4.1 Flash, DeepSeek V4 Pro
+- Mistral AI: Mistral Large 3, Mistral Medium 3.5, Mistral Small 4, Devstral 2, Ministral 3 8B
+- Meta (Llama): Llama 4.5 Maverick
+- Alibaba (Qwen): Qwen3.8 Max, Qwen3.8 Flash, Qwen3.8 27B
+- Cohere: Command A+, Command R
+
+## À venir
+
+- Mistral Large 4 : hors catalogue tant que les poids ne sont pas publiés.
+
+## Notes
+
+- Les prix sont indicatifs. Vérifier les pages tarifaires officielles de chaque fournisseur avant toute décision.

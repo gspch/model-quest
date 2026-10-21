@@ -208,7 +208,10 @@ const STRINGS = {
       "$ : coût estimé en dollars par million de tokens (un token ≈ 0,75 mot ; 1M tokens ≈ 750 000 mots traités en entrée ou en sortie).",
     "footer.title": "$ --help : petit lexique du terminal",
     "footer.legend":
-      "Ces lignes imitent un terminal (écran de commandes des développeurs). Le $ est l'invite (le signe qui attend vos ordres), man = manual (affiche la documentation), cat = affiche le contenu d'un fichier, et --global est une option (elle modifie le comportement de la commande). Ici, inutile de taper : cliquez !",
+      "Ces lignes imitent un terminal (écran de commandes des développeurs). Le $ est l'invite (le signe qui attend vos ordres), man affiche la documentation, cat affiche le contenu d'un fichier, git clone copie un projet, et --global est une option (elle modifie le comportement de la commande). Ici, inutile de taper : cliquez !",
+    "footer.cmd.quiz": "lance le quiz : 8 scénarios, 64 points maximum",
+    "footer.cmd.sim": "ouvre le simulateur de coût, de latence et de qualité",
+    "footer.cmd.source": "ouvre le code source du projet sur GitHub",
     "footer.cmd.scores": "affiche le classement mondial (commande inventée pour ce jeu)",
     "footer.cmd.guide": "affiche tout le contenu du guide, comme cat affiche un fichier",
     "footer.cmd.journey": "lance le parcours progressif, avec l'option --start",
@@ -429,7 +432,10 @@ const STRINGS = {
       "$: estimated cost in dollars per million tokens (one token ≈ 0.75 word; 1M tokens ≈ 750,000 words processed as input or output).",
     "footer.title": "$ --help: a tiny terminal glossary",
     "footer.legend":
-      "These lines mimic a terminal (the developers' command screen). The $ is the prompt (the sign waiting for your orders), man = manual (shows the documentation), cat = prints a file's contents, and --global is an option (it changes the command's behavior). No typing needed here: just click!",
+      "These lines mimic a terminal (the developers' command screen). The $ is the prompt (the sign waiting for your orders), man shows the documentation, cat prints a file's contents, git clone copies a project, and --global is an option (it changes the command's behavior). No typing needed here: just click!",
+    "footer.cmd.quiz": "starts the quiz: 8 scenarios, 64 points max",
+    "footer.cmd.sim": "opens the cost, latency and quality simulator",
+    "footer.cmd.source": "opens the project's source code on GitHub",
     "footer.cmd.scores": "shows the global leaderboard (a command invented for this game)",
     "footer.cmd.guide": "prints the whole guide, just like cat prints a file",
     "footer.cmd.journey": "starts the progressive journey, with the --start option",

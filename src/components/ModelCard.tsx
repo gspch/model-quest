@@ -45,11 +45,6 @@ export function ModelCard({
           {provider ? <ProviderLogo provider={provider} size="sm" /> : null}
           <span className="font-mono text-sm font-semibold text-foreground">{model.name}</span>
         </span>
-        {provider ? (
-          <span className={`font-mono text-[10px] uppercase tracking-wider ${provider.hue}`}>
-            {provider.badge}
-          </span>
-        ) : null}
       </div>
       <p className="mt-1 font-mono text-[11px] text-muted-foreground">{tierLabels[model.tier]}</p>
       <div className="mt-3 grid grid-cols-3 gap-2 font-mono text-[11px]">
