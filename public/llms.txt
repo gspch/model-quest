@@ -8,7 +8,8 @@
 - [Simulateur](https://model-quest.vercel.app/simulateur): coût mensuel, latence et qualité selon le modèle, l'effort et le volume de tokens.
 - [Parcours](https://model-quest.vercel.app/parcours): 4 niveaux, de débutant à expert.
 - [Guide](https://model-quest.vercel.app/guide): fiches de référence par fournisseur et par modèle.
-- [Classement](https://model-quest.vercel.app/scores): meilleurs scores du quiz.
+- [Classement](https://model-quest.vercel.app/scores): meilleurs scores du quiz (déclaratifs, non vérifiés).
+- [Mentions légales](https://model-quest.vercel.app/mentions-legales): éditeur, hébergeur, données personnelles.
 - [Code source](https://github.com/gspch/model-quest): MIT, TanStack Start, React 19.
 
 ## Catalogue

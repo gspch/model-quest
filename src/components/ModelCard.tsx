@@ -5,6 +5,7 @@ import type { ModelInfo, ProviderInfo } from "../data/models";
 import { TIER_LABELS, profileOf } from "../data/models";
 import { EN_MODELS, EN_TIER_LABELS } from "../data/en";
 import { useLang } from "../lib/i18n";
+import { Expert, useLevel } from "../lib/level";
 import { ProviderLogo } from "./ProviderLogo";
 
 export function ModelCard({
@@ -19,6 +20,7 @@ export function ModelCard({
   onSelect?: () => void;
 }) {
   const { lang, t } = useLang();
+  const { expert } = useLevel();
   const en = lang === "en";
   const tierLabels = en ? EN_TIER_LABELS : TIER_LABELS;
   const caps = en ? (EN_MODELS[model.id]?.capabilities ?? model.capabilities) : model.capabilities;
@@ -47,26 +49,32 @@ export function ModelCard({
         </span>
       </div>
       <p className="mt-1 font-mono text-[11px] text-muted-foreground">{tierLabels[model.tier]}</p>
-      <div className="mt-3 grid grid-cols-3 gap-2 font-mono text-[11px]">
-        <div>
-          <div className="text-muted-foreground">{t("model.price")}</div>
-          <div className="text-foreground">
-            ${currentPrice(model).priceIn}/{currentPrice(model).priceOut}
+      <div
+        className={`mt-3 grid gap-2 font-mono text-[11px] ${expert ? "grid-cols-3" : "grid-cols-1"}`}
+      >
+        <Expert>
+          <div>
+            <div className="text-muted-foreground">{t("model.price")}</div>
+            <div className="text-foreground">
+              ${currentPrice(model).priceIn}/{currentPrice(model).priceOut}
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="text-muted-foreground">{t("model.context")}</div>
-          <div className="text-foreground">{model.contextK}K</div>
-        </div>
+          <div>
+            <div className="text-muted-foreground">{t("model.context")}</div>
+            <div className="text-foreground">{model.contextK}K</div>
+          </div>
+        </Expert>
         <div>
           <div className="text-muted-foreground">{t("model.quality")}</div>
           <div className="text-foreground">{"★".repeat(model.quality)}</div>
         </div>
       </div>
       <PromoBadge model={model} />
-      <p className="mt-2 font-mono text-[10px] text-muted-foreground">
-        {t("model.params")} : <span className="text-foreground">{params}</span>
-      </p>
+      <Expert>
+        <p className="mt-2 font-mono text-[10px] text-muted-foreground">
+          {t("model.params")} : <span className="text-foreground">{params}</span>
+        </p>
+      </Expert>
       <div className="mt-3 flex flex-wrap gap-1">
         {caps.map((c) => (
           <span

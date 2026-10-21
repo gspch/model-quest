@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useLang } from "../lib/i18n";
+import { dataAgeDays } from "../data/sources";
 
 // Pied de page : lexique du terminal pour novices + commandes cliquables expliquées.
 export function Footer() {
@@ -53,6 +54,25 @@ export function Footer() {
         </nav>
         <p className="mt-4 border-t border-border/40 pt-3 text-center font-mono text-[10px] text-muted-foreground/70">
           model.quest · {t("catalogue.notice")}
+        </p>
+        {dataAgeDays() > 90 && (
+          <p role="status" className="mt-2 text-center font-mono text-[10px] text-amber-glow">
+            {t("footer.stale")}
+          </p>
+        )}
+        <p className="mt-2 text-center font-mono text-[10px] text-muted-foreground/70">
+          <Link to="/mentions-legales" className="underline underline-offset-4 hover:text-primary">
+            {t("footer.legal")}
+          </Link>{" "}
+          · MIT ·{" "}
+          <a
+            href="https://github.com/gspch/model-quest"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-4 hover:text-primary"
+          >
+            GitHub
+          </a>
         </p>
       </div>
     </footer>

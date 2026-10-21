@@ -2,6 +2,7 @@ import { EN_UPCOMING } from "../data/en";
 import type { ProviderInfo, UpcomingModel } from "../data/models";
 import { formatDataDate } from "../data/sources";
 import { useLang } from "../lib/i18n";
+import { Expert } from "../lib/level";
 import { ProviderLogo } from "./ProviderLogo";
 
 export function UpcomingCard({
@@ -27,12 +28,14 @@ export function UpcomingCard({
       <p className="mt-2 font-mono text-[11px] text-amber-glow">
         {t("upcoming.weights").replace("{date}", formatDataDate(model.weightsDate, lang))}
       </p>
-      <p className="mt-1 font-mono text-[11px] text-muted-foreground">
-        {t("upcoming.specs")
-          .replace("{total}", String(model.paramsTotalB))
-          .replace("{active}", String(model.paramsActiveB))
-          .replace("{ctx}", String(model.contextK / 1000))}
-      </p>
+      <Expert>
+        <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+          {t("upcoming.specs")
+            .replace("{total}", String(model.paramsTotalB))
+            .replace("{active}", String(model.paramsActiveB))
+            .replace("{ctx}", String(model.contextK / 1000))}
+        </p>
+      </Expert>
       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{note}</p>
       <p className="mt-2 font-mono text-[10px] text-muted-foreground/70">
         {t("upcoming.excluded")}

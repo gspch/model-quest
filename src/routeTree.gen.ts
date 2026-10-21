@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as ParcoursRouteImport } from './routes/parcours'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ScoresRouteImport } from './routes/scores'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const GuideRoute = GuideRouteImport.update({
   id: '/guide',
   path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
+  id: '/mentions-legales',
+  path: '/mentions-legales',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ParcoursRoute = ParcoursRouteImport.update({
@@ -50,6 +56,7 @@ const SimulateurRoute = SimulateurRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/guide': typeof GuideRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/parcours': typeof ParcoursRoute
   '/quiz': typeof QuizRoute
   '/scores': typeof ScoresRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/guide': typeof GuideRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/parcours': typeof ParcoursRoute
   '/quiz': typeof QuizRoute
   '/scores': typeof ScoresRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/guide': typeof GuideRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/parcours': typeof ParcoursRoute
   '/quiz': typeof QuizRoute
   '/scores': typeof ScoresRoute
@@ -74,13 +83,28 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/guide' | '/parcours' | '/quiz' | '/scores' | '/simulateur'
+  fullPaths:
+    | '/'
+    | '/guide'
+    | '/mentions-legales'
+    | '/parcours'
+    | '/quiz'
+    | '/scores'
+    | '/simulateur'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/guide' | '/parcours' | '/quiz' | '/scores' | '/simulateur'
+  to:
+    | '/'
+    | '/guide'
+    | '/mentions-legales'
+    | '/parcours'
+    | '/quiz'
+    | '/scores'
+    | '/simulateur'
   id:
     | '__root__'
     | '/'
     | '/guide'
+    | '/mentions-legales'
     | '/parcours'
     | '/quiz'
     | '/scores'
@@ -90,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GuideRoute: typeof GuideRoute
+  MentionsLegalesRoute: typeof MentionsLegalesRoute
   ParcoursRoute: typeof ParcoursRoute
   QuizRoute: typeof QuizRoute
   ScoresRoute: typeof ScoresRoute
@@ -110,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/guide'
       fullPath: '/guide'
       preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentions-legales': {
+      id: '/mentions-legales'
+      path: '/mentions-legales'
+      fullPath: '/mentions-legales'
+      preLoaderRoute: typeof MentionsLegalesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/parcours': {
@@ -146,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GuideRoute: GuideRoute,
+  MentionsLegalesRoute: MentionsLegalesRoute,
   ParcoursRoute: ParcoursRoute,
   QuizRoute: QuizRoute,
   ScoresRoute: ScoresRoute,

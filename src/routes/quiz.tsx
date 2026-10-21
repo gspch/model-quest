@@ -2,7 +2,7 @@ import { Button } from "../components/ui/button";
 import { PromoBadge } from "../components/PromoBadge";
 import { currentPrice } from "../data/models";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Nav } from "../components/Nav";
 import { Footer } from "../components/Footer";
 import { ExplainToggle } from "../components/ExplainToggle";
@@ -17,6 +17,8 @@ import {
 } from "../lib/leaderboard";
 import { seo } from "../lib/seo";
 import { useLang } from "../lib/i18n";
+import { useLevel } from "../lib/level";
+import { randomSeed, seededShuffle } from "../lib/shuffle";
 import { ProviderLogo } from "../components/ProviderLogo";
 import {
   EN_EFFORTS,
@@ -58,7 +60,10 @@ const MAX_PER_SCENARIO = 8;
 function Quiz() {
   const { t, lang } = useLang();
   const en = lang === "en";
+  const { expert } = useLevel();
   const [idx, setIdx] = useState(0);
+  // Graine tirée à chaque partie : ordre des scénarios et des choix différent à chaque fois.
+  const [seed, setSeed] = useState<number | null>(null);
   const [step, setStep] = useState<Step>("provider");
   const [providerId, setProviderId] = useState<string | null>(null);
   const [modelId, setModelId] = useState<string | null>(null);
@@ -72,9 +77,19 @@ function Quiz() {
 
   useEffect(() => {
     setRecords(loadScores());
+    setSeed(randomSeed());
   }, []);
 
-  const scenario = SCENARIOS[idx] ?? SCENARIOS[0];
+  const scenarios = useMemo(
+    () => (seed === null ? SCENARIOS : seededShuffle(SCENARIOS, seed)),
+    [seed],
+  );
+  const providersOrder = useMemo(
+    () => (seed === null ? PROVIDERS : seededShuffle(PROVIDERS, seed + idx * 7919 + 1)),
+    [seed, idx],
+  );
+
+  const scenario = scenarios[idx] ?? scenarios[0];
   if (!scenario) throw new Error("No quiz scenarios configured");
   const enScenario = en ? EN_SCENARIOS[scenario.id] : undefined;
   const chosenModel = modelId ? modelById(modelId) : undefined;
@@ -88,7 +103,7 @@ function Quiz() {
   const verdictLabels = en ? EN_VERDICT_LABELS : VERDICT_LABELS;
 
   function next() {
-    if (idx + 1 >= SCENARIOS.length) {
+    if (idx + 1 >= scenarios.length) {
       setRecords(recordQuizRun(score, SCENARIOS.length * MAX_PER_SCENARIO));
       setDone(true);
     } else {
@@ -101,6 +116,7 @@ function Quiz() {
   }
 
   function restart() {
+    setSeed(randomSeed());
     setIdx(0);
     setScore(0);
     setDone(false);
@@ -119,6 +135,20 @@ function Quiz() {
     const ok = await submitScore(playerName.trim(), score, max, rankTitle(score / max, lang));
     setPublishState(ok ? "done" : "error");
     if (ok) setPlayerRank(await fetchPlayerRank(score));
+  }
+
+  if (seed === null) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <Nav />
+        <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-20 text-center">
+          <p role="status" className="font-mono text-sm text-muted-foreground">
+            {t("quiz.loading")}
+          </p>
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
   if (done) {
@@ -241,7 +271,7 @@ function Quiz() {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
         <div className="mb-6 flex items-center justify-between font-mono text-xs text-muted-foreground">
           <span>
-            {t("quiz.scenario")} {idx + 1}/{SCENARIOS.length}
+            {t("quiz.scenario")} {idx + 1}/{scenarios.length}
           </span>
           <span>
             {t("quiz.score")}: <span className="text-primary">{score}</span>
@@ -255,7 +285,7 @@ function Quiz() {
         <div className="h-1.5 overflow-hidden rounded-full bg-muted">
           <div
             className="h-full bg-primary transition-all duration-500"
-            style={{ width: `${((idx + (step === "result" ? 1 : 0)) / SCENARIOS.length) * 100}%` }}
+            style={{ width: `${((idx + (step === "result" ? 1 : 0)) / scenarios.length) * 100}%` }}
           />
         </div>
 
@@ -278,7 +308,7 @@ function Quiz() {
               <span className="text-primary">1/3</span> : {t("quiz.step1")}
             </h2>
             <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
-              {PROVIDERS.map((p) => (
+              {providersOrder.map((p) => (
                 <Button
                   variant="unstyled"
                   type="button"
@@ -312,7 +342,7 @@ function Quiz() {
               {PROVIDERS.find((p) => p.id === providerId)?.name} ?
             </h2>
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
-              {modelsOfProvider(providerId).map((m, i) => (
+              {seededShuffle(modelsOfProvider(providerId), seed + idx * 104729 + 7).map((m, i) => (
                 <Button
                   variant="unstyled"
                   type="button"
@@ -326,20 +356,26 @@ function Quiz() {
                 >
                   <p className="font-semibold text-foreground">
                     {m.name}
-                    {profileOf(m.id).openWeights && (
+                    {expert && profileOf(m.id).openWeights && (
                       <span className="ml-2 rounded border border-cyan-glow/50 px-1 py-px font-mono text-[9px] text-cyan-glow">
                         OW
                       </span>
                     )}
                   </p>
                   <p className="mt-1 font-mono text-xs text-muted-foreground">
-                    {tierLabels[m.tier]} · ${currentPrice(m).priceIn}/${currentPrice(m).priceOut}{" "}
-                    /Mtok · {"★".repeat(m.quality)} · {profileOf(m.id).releaseTag} ·{" "}
-                    {profileOf(m.id).paramsB === null
-                      ? t("params.undisclosed")
-                      : en
-                        ? `≈${profileOf(m.id).paramsB}B`
-                        : `≈${profileOf(m.id).paramsB} Md`}
+                    {tierLabels[m.tier]} · {"★".repeat(m.quality)}
+                    {expert && (
+                      <>
+                        {" "}
+                        · ${currentPrice(m).priceIn}/${currentPrice(m).priceOut} /Mtok ·{" "}
+                        {profileOf(m.id).releaseTag} ·{" "}
+                        {profileOf(m.id).paramsB === null
+                          ? t("params.undisclosed")
+                          : en
+                            ? `≈${profileOf(m.id).paramsB}B`
+                            : `≈${profileOf(m.id).paramsB} Md`}
+                      </>
+                    )}
                   </p>
                   <PromoBadge model={m} />
                   <p className="mt-1 text-xs text-muted-foreground">
@@ -388,7 +424,9 @@ function Quiz() {
                     <p className="font-semibold text-foreground">{effortLabel(e)}</p>
                     <p className="mt-1 font-mono text-[11px] text-muted-foreground">
                       {supported
-                        ? `×${EFFORTS[e].costMultiplier} ${t("effort.output")}`
+                        ? expert
+                          ? `×${EFFORTS[e].costMultiplier} ${t("effort.output")}`
+                          : ""
                         : t("quiz.notOffered")}
                     </p>
                   </Button>
@@ -512,7 +550,7 @@ function Quiz() {
               onClick={next}
               className="w-full rounded-lg bg-primary px-6 py-3 font-mono text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02]"
             >
-              {idx + 1 >= SCENARIOS.length ? t("quiz.seeScore") : t("quiz.next")}
+              {idx + 1 >= scenarios.length ? t("quiz.seeScore") : t("quiz.next")}
             </Button>
           </section>
         )}

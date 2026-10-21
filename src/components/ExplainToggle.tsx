@@ -1,10 +1,19 @@
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { useLang } from "../lib/i18n";
+import { useLevel } from "../lib/level";
 
 export function ExplainToggle({ simple, tech }: { simple: string; tech: string }) {
   const { t } = useLang();
   const [mode, setMode] = useState<"simple" | "tech">("simple");
+  const { expert } = useLevel();
+  if (!expert) {
+    return (
+      <div className="rounded-lg border border-border bg-terminal p-4">
+        <p className="text-sm leading-relaxed text-foreground">{simple}</p>
+      </div>
+    );
+  }
   return (
     <div className="rounded-lg border border-border bg-terminal p-4">
       <div className="mb-2 flex items-center gap-2">

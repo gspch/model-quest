@@ -47,7 +47,12 @@ export default tseslint.config(
   },
   {
     // Les contextes React exportent un provider et son hook : le rechargement à chaud complet suffit.
-    files: ["src/lib/i18n.tsx", "src/lib/theme.tsx", "src/components/ui/button.tsx"],
+    files: [
+      "src/lib/i18n.tsx",
+      "src/lib/theme.tsx",
+      "src/lib/level.tsx",
+      "src/components/ui/button.tsx",
+    ],
     rules: { "react-refresh/only-export-components": "off" },
   },
   eslintPluginPrettier,

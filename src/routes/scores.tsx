@@ -38,6 +38,9 @@ function Scores() {
         <p className="font-mono text-sm text-primary">$ leaderboard --global</p>
         <h1 className="mt-2 text-3xl font-bold text-foreground">{t("scores.title")}</h1>
         <p className="mt-2 text-muted-foreground">{t("scores.sub")}</p>
+        <p className="mt-1 font-mono text-[11px] text-muted-foreground/80">
+          {t("scores.disclaimer")}
+        </p>
 
         <div className="mt-8 overflow-hidden rounded-xl border border-border bg-card">
           <div className="grid grid-cols-[3rem_1fr_5rem_7rem] gap-2 border-b border-border bg-terminal px-4 py-2.5 font-mono text-[11px] text-muted-foreground sm:grid-cols-[3rem_1fr_6rem_8rem_7rem]">
