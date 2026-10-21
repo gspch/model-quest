@@ -2,8 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "../components/Nav";
 import { Footer } from "../components/Footer";
 import { ModelCard } from "../components/ModelCard";
+import { UpcomingCard } from "../components/UpcomingCard";
 import { ProviderLogo } from "../components/ProviderLogo";
-import { EFFORTS, GLOSSARY, MODELS, PROVIDERS, modelsOfProvider } from "../data/models";
+import {
+  EFFORTS,
+  GLOSSARY,
+  MODELS,
+  PROVIDERS,
+  modelsOfProvider,
+  upcomingOfProvider,
+} from "../data/models";
 import { EN_EFFORTS, EN_GLOSSARY, EN_PROVIDERS } from "../data/en";
 import { useLang } from "../lib/i18n";
 import { PROVIDER_PRICING_URLS } from "../data/sources";
@@ -131,6 +139,9 @@ function Guide() {
                   <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {models.map((m) => (
                       <ModelCard key={m.id} model={m} provider={p} />
+                    ))}
+                    {upcomingOfProvider(p.id).map((u) => (
+                      <UpcomingCard key={u.id} model={u} provider={p} />
                     ))}
                   </div>
                 </div>

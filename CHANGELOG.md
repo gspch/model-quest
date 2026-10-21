@@ -2,6 +2,12 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [Non publié]
+
+### Ajouté
+
+- Teasing de Mistral Large 4 (bandeau d'accueil et carte « Bientôt » dans le guide), hors quiz, simulateur et parcours.
+
 ## [1.0.0] - 2026-10-21
 
 ### Ajouté

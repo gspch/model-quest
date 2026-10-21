@@ -184,6 +184,11 @@ const STRINGS = {
     "catalogue.notice":
       "Données indicatives vérifiées le {date}. Les prix et capacités évoluent vite : vérifiez toujours la page officielle du provider.",
     "catalogue.pricing": "Tarifs officiels",
+    "upcoming.badge": "BIENTÔT",
+    "upcoming.weights": "Poids ouverts prévus le {date} (date indicative)",
+    "upcoming.specs": "≈{total} Md de paramètres, {active} Md actifs · contexte ≈{ctx}M tokens",
+    "upcoming.home": "Bientôt dans le catalogue : {name}",
+    "upcoming.excluded": "Hors quiz et simulateur",
     "guide.pickProvider": "$ ls /providers : cliquez pour sauter à une fiche",
     "model.params": "paramètres (taille du modèle, en milliards)",
     "params.undisclosed": "non publié",
@@ -400,6 +405,11 @@ const STRINGS = {
     "catalogue.notice":
       "Indicative data verified on {date}. Prices and capabilities change fast: always check the provider's official page.",
     "catalogue.pricing": "Official pricing",
+    "upcoming.badge": "SOON",
+    "upcoming.weights": "Open weights expected {date} (indicative date)",
+    "upcoming.specs": "≈{total}B parameters, {active}B active · context ≈{ctx}M tokens",
+    "upcoming.home": "Coming to the catalogue: {name}",
+    "upcoming.excluded": "Not in the quiz or simulator yet",
     "guide.pickProvider": "$ ls /providers: click to jump to a fact sheet",
     "model.params": "parameters (model size, in billions)",
     "params.undisclosed": "undisclosed",

@@ -996,6 +996,36 @@ export const SCENARIOS: Scenario[] = [
   },
 ];
 
+// Modèles annoncés mais pas encore dans le catalogue : affichés en teasing,
+// jamais utilisés par le quiz, le simulateur ni le parcours.
+export interface UpcomingModel {
+  id: string;
+  providerId: string;
+  name: string;
+  weightsDate: string; // date indicative de publication des poids (UTC)
+  paramsTotalB: number;
+  paramsActiveB: number;
+  contextK: number;
+  note: string;
+}
+
+export const UPCOMING_MODELS: UpcomingModel[] = [
+  {
+    id: "mistral-large-4",
+    providerId: "mistral",
+    name: "Mistral Large 4",
+    weightsDate: "2026-10-31",
+    paramsTotalB: 1000,
+    paramsActiveB: 49,
+    contextK: 1000,
+    note: "Préversion publique en cours. Prix et licence non confirmés : le modèle entrera au catalogue à la publication des poids.",
+  },
+];
+
+export function upcomingOfProvider(providerId: string): UpcomingModel[] {
+  return UPCOMING_MODELS.filter((m) => m.providerId === providerId);
+}
+
 export const TIER_LABELS: Record<Tier, string> = {
   fast: "Rapide / économique",
   balanced: "Équilibré",

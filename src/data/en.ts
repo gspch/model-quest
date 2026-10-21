@@ -396,6 +396,12 @@ export const EN_SCENARIOS: Record<
   },
 };
 
+export const EN_UPCOMING: Record<string, { note: string }> = {
+  "mistral-large-4": {
+    note: "Public preview is live. Price and license are unconfirmed: the model joins the catalogue once the weights are published.",
+  },
+};
+
 export const EN_EFFORTS = {
   none: {
     label: "None",

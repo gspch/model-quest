@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { MODELS, MODEL_PROFILES, PROVIDERS, SCENARIOS } from "../data/models";
-import { EN_LEVELS, EN_MODELS, EN_PROVIDERS, EN_SCENARIOS } from "../data/en";
+import { MODELS, MODEL_PROFILES, PROVIDERS, SCENARIOS, UPCOMING_MODELS } from "../data/models";
+import { EN_LEVELS, EN_MODELS, EN_PROVIDERS, EN_SCENARIOS, EN_UPCOMING } from "../data/en";
 import { PROVIDER_PRICING_URLS } from "../data/sources";
 
 describe("October 2026 catalogue", () => {
@@ -57,5 +57,20 @@ describe("October 2026 catalogue", () => {
     }
     expect(Object.keys(EN_LEVELS)).toHaveLength(4);
     for (const level of Object.values(EN_LEVELS)) expect(level.questions).toHaveLength(3);
+  });
+});
+
+describe("upcoming models teasing", () => {
+  it("keeps announced models out of the catalogue, scenarios and profiles", () => {
+    for (const upcoming of UPCOMING_MODELS) {
+      expect(PROVIDERS.some((p) => p.id === upcoming.providerId)).toBe(true);
+      expect(MODELS.some((m) => m.id === upcoming.id)).toBe(false);
+      expect(MODEL_PROFILES[upcoming.id]).toBeUndefined();
+      expect(EN_UPCOMING[upcoming.id]?.note.trim()).toBeTruthy();
+      expect(upcoming.weightsDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(upcoming.paramsActiveB).toBeLessThan(upcoming.paramsTotalB);
+      for (const scenario of SCENARIOS)
+        expect(scenario.choices.some((c) => c.modelId === upcoming.id)).toBe(false);
+    }
   });
 });

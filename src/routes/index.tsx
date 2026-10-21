@@ -4,7 +4,8 @@ import { Nav } from "../components/Nav";
 import { Footer } from "../components/Footer";
 import { Typewriter } from "../components/Typewriter";
 import { loadScores, type ScoreState } from "../lib/scores";
-import { MODELS, PROVIDERS } from "../data/models";
+import { MODELS, PROVIDERS, UPCOMING_MODELS } from "../data/models";
+import { formatDataDate } from "../data/sources";
 import { useLang } from "../lib/i18n";
 
 export const Route = createFileRoute("/")({
@@ -142,6 +143,21 @@ function Home() {
             </div>
           )}
         </section>
+
+        {UPCOMING_MODELS.map((u) => (
+          <Link
+            key={u.id}
+            to="/guide"
+            hash={`provider-${u.providerId}`}
+            className="animate-rise mx-auto mb-8 flex max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-lg border border-dashed border-amber-glow/60 bg-card px-4 py-2 font-mono text-xs text-amber-glow transition-colors hover:bg-secondary"
+          >
+            <span className="rounded border border-amber-glow/60 px-1.5 py-px text-[10px]">
+              {t("upcoming.badge")}
+            </span>
+            <span>{t("upcoming.home").replace("{name}", u.name)}</span>
+            <span className="text-muted-foreground">{formatDataDate(u.weightsDate, lang)}</span>
+          </Link>
+        ))}
 
         <section className="grid gap-4 sm:grid-cols-2">
           {MODES.map((m, i) => (
