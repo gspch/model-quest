@@ -1,0 +1,23 @@
+name: Donnée obsolète
+description: Un prix, un modèle ou une capacité qui n'est plus à jour
+labels: [data]
+body:
+  - type: input
+    id: model
+    attributes:
+      label: Modèle ou fournisseur concerné
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Valeur actuelle et valeur correcte
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Lien vers la source officielle
+      placeholder: https://
+    validations:
+      required: true

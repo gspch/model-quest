@@ -1,0 +1,17 @@
+# Changelog
+
+Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
+
+## [1.0.0] - 2026-10-21
+
+### Ajouté
+
+- Quiz de 8 scénarios, simulateur, parcours en 4 niveaux et guide de 8 fournisseurs et 23 modèles.
+- Interface FR/EN et 4 thèmes visuels.
+- Classement en ligne optionnel (Supabase) avec contraintes SQL.
+- Promotions tarifaires à expiration automatique (Gemini 4 Argon, Gemini 3.8 Flash).
+- Tests d'intégrité des données, de notation, de coût et du classement. CI GitHub Actions.
+
+### Données
+
+- Catalogue vérifié le 21 octobre 2026 : DeepSeek V4.1 Flash (snapshot 1017), Mistral Large 4 annoncé pour fin octobre.
