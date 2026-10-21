@@ -1,4 +1,9 @@
 export const DATA_VERIFIED_ON = "2026-10-21";
+
+// Âge en jours des données du catalogue (pour avertir quand elles vieillissent).
+export function dataAgeDays(now = new Date()): number {
+  return Math.floor((now.getTime() - Date.parse(`${DATA_VERIFIED_ON}T00:00:00Z`)) / 86400000);
+}
 // Public provider pricing references; the catalogue remains indicative.
 export const PROVIDER_PRICING_URLS: Record<string, string> = {
   openai: "https://openai.com/api/pricing",

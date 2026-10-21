@@ -4,10 +4,12 @@ import { useState } from "react";
 import { Logo } from "./Logo";
 import { useLang } from "../lib/i18n";
 import { THEMES, useTheme } from "../lib/theme";
+import { useLevel, type Level } from "../lib/level";
 
 export function Nav() {
   const { lang, setLang, t } = useLang();
   const { theme, setTheme } = useTheme();
+  const { level, setLevel } = useLevel();
   const [themeOpen, setThemeOpen] = useState(false);
 
   const LINKS = [
@@ -61,6 +63,30 @@ export function Nav() {
                 }`}
               >
                 {l}
+              </Button>
+            ))}
+          </div>
+          {/* Niveau : Débutant masque les détails techniques, Expert les dévoile */}
+          <div
+            className="flex rounded-md border border-border"
+            role="group"
+            aria-label={t("level.label")}
+            title={t("level.hint")}
+          >
+            {(["beginner", "expert"] as const satisfies readonly Level[]).map((l) => (
+              <Button
+                variant="unstyled"
+                type="button"
+                key={l}
+                aria-pressed={level === l}
+                onClick={() => setLevel(l)}
+                className={`px-2 py-1 font-mono text-[11px] transition-colors ${
+                  level === l
+                    ? "bg-secondary text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t(l === "beginner" ? "level.beginner" : "level.expert")}
               </Button>
             ))}
           </div>

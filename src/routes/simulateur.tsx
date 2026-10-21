@@ -10,6 +10,7 @@ import { Gauge } from "../components/Gauge";
 import { ExplainToggle } from "../components/ExplainToggle";
 import { seo } from "../lib/seo";
 import { useLang } from "../lib/i18n";
+import { Expert, useLevel } from "../lib/level";
 import { EN_EFFORTS, EN_MODELS, EN_PROVIDERS } from "../data/en";
 import {
   EFFORTS,
@@ -38,6 +39,7 @@ export const Route = createFileRoute("/simulateur")({
 
 function Simulateur() {
   const { t, lang } = useLang();
+  const { expert } = useLevel();
   const en = lang === "en";
   const [providerId, setProviderId] = useState("openai");
   const [modelId, setModelId] = useState("gpt-6-astra");
@@ -54,6 +56,11 @@ function Simulateur() {
     : (model?.efforts[0] ?? "none");
 
   const cost = model ? estimateCost(model, validEffort, volume, inputShare / 100) : 0;
+  const { priceIn: pIn, priceOut: pOut } = model
+    ? currentPrice(model)
+    : { priceIn: 0, priceOut: 0 };
+  const costIn = volume * (inputShare / 100) * pIn;
+  const costOut = volume * (1 - inputShare / 100) * pOut * EFFORTS[validEffort].costMultiplier;
   const latency = model ? effectiveLatency(model, validEffort) : 0;
   const quality = model ? effectiveQuality(model, validEffort) : 0;
 
@@ -113,29 +120,31 @@ function Simulateur() {
                 <span>500M</span>
               </div>
             </section>
-            <section className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-center justify-between gap-2">
-                <label htmlFor="input-share" className="text-sm text-foreground">
-                  {t("sim.inputShare")}
-                </label>
-                <output htmlFor="input-share" className="font-mono text-sm text-primary">
-                  {inputShare}%
-                </output>
-              </div>
-              <input
-                id="input-share"
-                type="range"
-                min={10}
-                max={95}
-                value={inputShare}
-                onChange={(e) => setInputShare(Number(e.target.value))}
-                aria-describedby="input-share-help"
-                className="mt-3 w-full accent-primary"
-              />
-              <p id="input-share-help" className="mt-2 text-xs text-muted-foreground">
-                {t("sim.inputHelp")}
-              </p>
-            </section>
+            <Expert>
+              <section className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center justify-between gap-2">
+                  <label htmlFor="input-share" className="text-sm text-foreground">
+                    {t("sim.inputShare")}
+                  </label>
+                  <output htmlFor="input-share" className="font-mono text-sm text-primary">
+                    {inputShare}%
+                  </output>
+                </div>
+                <input
+                  id="input-share"
+                  type="range"
+                  min={10}
+                  max={95}
+                  value={inputShare}
+                  onChange={(e) => setInputShare(Number(e.target.value))}
+                  aria-describedby="input-share-help"
+                  className="mt-3 w-full accent-primary"
+                />
+                <p id="input-share-help" className="mt-2 text-xs text-muted-foreground">
+                  {t("sim.inputHelp")}
+                </p>
+              </section>
+            </Expert>
             <section className="rounded-xl border border-border bg-card p-5">
               <h2 className="font-mono text-xs text-muted-foreground">{t("sim.provider")}</h2>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -189,9 +198,11 @@ function Simulateur() {
                       <span className="font-mono text-sm font-semibold text-foreground">
                         {m.name}
                       </span>
-                      <span className="font-mono text-xs text-muted-foreground">
-                        ${currentPrice(m).priceIn}/${currentPrice(m).priceOut} /Mtok
-                      </span>
+                      <Expert>
+                        <span className="font-mono text-xs text-muted-foreground">
+                          ${currentPrice(m).priceIn}/${currentPrice(m).priceOut} /Mtok
+                        </span>
+                      </Expert>
                     </div>
                     <PromoBadge model={m} />
                     <p className="mt-1 text-xs text-muted-foreground">
@@ -223,9 +234,11 @@ function Simulateur() {
                       }`}
                     >
                       {effortLabel(e)}
-                      <span className="block text-[10px]">
-                        ×{EFFORTS[e].costMultiplier} {t("effort.output")}
-                      </span>
+                      <Expert>
+                        <span className="block text-[10px]">
+                          ×{EFFORTS[e].costMultiplier} {t("effort.output")}
+                        </span>
+                      </Expert>
                     </Button>
                   );
                 })}
@@ -260,19 +273,28 @@ function Simulateur() {
                   }
                 />
                 <Gauge label={t("sim.quality")} value={quality} hint={`${quality.toFixed(1)}/5`} />
-                <Gauge
-                  label={t("sim.context")}
-                  value={Math.min(5, Math.log10(model.contextK) * 2.2)}
-                  hint={`${model.contextK}K tokens`}
-                />
+                {expert && (
+                  <Gauge
+                    label={t("sim.context")}
+                    value={Math.min(5, Math.log10(model.contextK) * 2.2)}
+                    hint={`${model.contextK}K tokens`}
+                  />
+                )}
               </div>
               <p className="mt-4 font-mono text-xs text-muted-foreground">
                 {t("sim.costRank")} : <span className="text-primary">#{rank}</span> /{" "}
                 {MODELS.length} {t("sim.ofModels")}
               </p>
-              <p className="mt-2 font-mono text-[10px] leading-relaxed text-muted-foreground/70">
-                {t("cost.legend")} {t("sim.costFormula")}
-              </p>
+              <Expert>
+                <p className="mt-2 font-mono text-[10px] leading-relaxed text-muted-foreground/70">
+                  {t("cost.legend")} {t("sim.costFormula")}
+                </p>
+                <p className="mt-2 font-mono text-[11px] text-primary">
+                  {t("sim.breakdown")
+                    .replace("{in}", costIn.toFixed(0))
+                    .replace("{out}", costOut.toFixed(0))}
+                </p>
+              </Expert>
             </section>
 
             <section className="rounded-xl border border-border bg-card p-5">
@@ -293,64 +315,66 @@ function Simulateur() {
               <p className="mt-2 text-sm text-muted-foreground">{compliance}</p>
             </section>
 
-            <section className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-center justify-between">
-                <h2 className="font-mono text-xs text-muted-foreground">{t("sim.profile")}</h2>
-                <span className="font-mono text-[10px] text-muted-foreground">
-                  {t("sim.release")} {profile.releaseTag}
-                </span>
-              </div>
-              <div className="mt-3 space-y-2 font-mono text-xs">
-                <p className="text-muted-foreground">
-                  {t("sim.modalitiesIn")} :{" "}
-                  {profile.modalitiesIn.map((m: Modality) => (
-                    <span
-                      key={m}
-                      className="mr-1.5 rounded border border-primary/40 bg-terminal px-1.5 py-0.5 text-primary"
-                    >
-                      {t(`mod.${m}` as Parameters<typeof t>[0])}
-                    </span>
-                  ))}
-                </p>
-                <p className="text-muted-foreground">
-                  {t("sim.modalitiesOut")} :{" "}
-                  {profile.modalitiesOut.map((m: Modality) => (
-                    <span
-                      key={m}
-                      className="mr-1.5 rounded border border-cyan-glow/40 bg-terminal px-1.5 py-0.5 text-cyan-glow"
-                    >
-                      {t(`mod.${m}` as Parameters<typeof t>[0])}
-                    </span>
-                  ))}
-                </p>
-                <p className={profile.openWeights ? "text-primary" : "text-muted-foreground"}>
-                  {profile.openWeights ? "◆" : "◇"}{" "}
-                  {profile.openWeights ? t("sim.openWeights") : t("sim.closedWeights")}
-                </p>
-                <p className="text-muted-foreground">
-                  {t("model.params")} :{" "}
-                  <span className="text-foreground">
-                    {profile.paramsB === null
-                      ? t("params.undisclosed")
-                      : en
-                        ? `≈${profile.paramsB}B`
-                        : `≈${profile.paramsB} Md`}
+            <Expert>
+              <section className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-mono text-xs text-muted-foreground">{t("sim.profile")}</h2>
+                  <span className="font-mono text-[10px] text-muted-foreground">
+                    {t("sim.release")} {profile.releaseTag}
                   </span>
-                </p>
-              </div>
-              <div className="mt-4 space-y-4">
-                <Gauge
-                  label={t("sim.toolUse")}
-                  value={profile.toolUse}
-                  hint={`${profile.toolUse}/5`}
-                />
-                <Gauge
-                  label={t("sim.coding")}
-                  value={profile.coding}
-                  hint={`${profile.coding}/5`}
-                />
-              </div>
-            </section>
+                </div>
+                <div className="mt-3 space-y-2 font-mono text-xs">
+                  <p className="text-muted-foreground">
+                    {t("sim.modalitiesIn")} :{" "}
+                    {profile.modalitiesIn.map((m: Modality) => (
+                      <span
+                        key={m}
+                        className="mr-1.5 rounded border border-primary/40 bg-terminal px-1.5 py-0.5 text-primary"
+                      >
+                        {t(`mod.${m}` as Parameters<typeof t>[0])}
+                      </span>
+                    ))}
+                  </p>
+                  <p className="text-muted-foreground">
+                    {t("sim.modalitiesOut")} :{" "}
+                    {profile.modalitiesOut.map((m: Modality) => (
+                      <span
+                        key={m}
+                        className="mr-1.5 rounded border border-cyan-glow/40 bg-terminal px-1.5 py-0.5 text-cyan-glow"
+                      >
+                        {t(`mod.${m}` as Parameters<typeof t>[0])}
+                      </span>
+                    ))}
+                  </p>
+                  <p className={profile.openWeights ? "text-primary" : "text-muted-foreground"}>
+                    {profile.openWeights ? "◆" : "◇"}{" "}
+                    {profile.openWeights ? t("sim.openWeights") : t("sim.closedWeights")}
+                  </p>
+                  <p className="text-muted-foreground">
+                    {t("model.params")} :{" "}
+                    <span className="text-foreground">
+                      {profile.paramsB === null
+                        ? t("params.undisclosed")
+                        : en
+                          ? `≈${profile.paramsB}B`
+                          : `≈${profile.paramsB} Md`}
+                    </span>
+                  </p>
+                </div>
+                <div className="mt-4 space-y-4">
+                  <Gauge
+                    label={t("sim.toolUse")}
+                    value={profile.toolUse}
+                    hint={`${profile.toolUse}/5`}
+                  />
+                  <Gauge
+                    label={t("sim.coding")}
+                    value={profile.coding}
+                    hint={`${profile.coding}/5`}
+                  />
+                </div>
+              </section>
+            </Expert>
 
             <ExplainToggle
               simple={en ? (EN_MODELS[model.id]?.simpleNote ?? model.simpleNote) : model.simpleNote}

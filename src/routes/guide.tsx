@@ -15,6 +15,7 @@ import {
 import { EN_EFFORTS, EN_GLOSSARY, EN_PROVIDERS } from "../data/en";
 import { seo } from "../lib/seo";
 import { useLang } from "../lib/i18n";
+import { Expert } from "../lib/level";
 import { PROVIDER_PRICING_URLS } from "../data/sources";
 
 export const Route = createFileRoute("/guide")({
@@ -45,9 +46,11 @@ function Guide() {
         <p className="mt-4 border-l-2 border-primary bg-secondary px-4 py-3 text-xs leading-relaxed text-muted-foreground">
           {t("catalogue.notice")}
         </p>
-        <p className="mt-3 max-w-2xl font-mono text-[11px] leading-relaxed text-muted-foreground/80">
-          {t("cost.legend")}
-        </p>
+        <Expert>
+          <p className="mt-3 max-w-2xl font-mono text-[11px] leading-relaxed text-muted-foreground/80">
+            {t("cost.legend")}
+          </p>
+        </Expert>
 
         {/* Bandeau animé de sélection des providers */}
         <div className="mt-8">
@@ -175,18 +178,22 @@ function Guide() {
                   className="card-hover-neon rounded-lg border border-border bg-card p-3"
                 >
                   <p className="font-mono text-sm font-semibold text-foreground">{label}</p>
-                  <p className="mt-1 font-mono text-[11px] text-primary">
-                    ×{e.costMultiplier} {t("effort.output")}
-                  </p>
+                  <Expert>
+                    <p className="mt-1 font-mono text-[11px] text-primary">
+                      ×{e.costMultiplier} {t("effort.output")}
+                    </p>
+                  </Expert>
                   <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{simple}</p>
                 </div>
               );
             })}
           </div>
-          <p className="mt-4 rounded-lg border border-cyan-glow/30 bg-card p-3 text-xs leading-relaxed text-muted-foreground">
-            <span className="font-mono text-cyan-glow">{t("guide.note")}</span>{" "}
-            {t("guide.effortNote")}
-          </p>
+          <Expert>
+            <p className="mt-4 rounded-lg border border-cyan-glow/30 bg-card p-3 text-xs leading-relaxed text-muted-foreground">
+              <span className="font-mono text-cyan-glow">{t("guide.note")}</span>{" "}
+              {t("guide.effortNote")}
+            </p>
+          </Expert>
         </section>
       </main>
       <Footer />

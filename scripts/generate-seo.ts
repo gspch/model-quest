@@ -12,6 +12,7 @@ const pages = [
   { path: "/parcours", priority: "0.8" },
   { path: "/guide", priority: "0.9" },
   { path: "/scores", priority: "0.5" },
+  { path: "/mentions-legales", priority: "0.2" },
 ];
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -35,7 +36,8 @@ const llms = `# model.quest
 - [Simulateur](${SITE}/simulateur): coût mensuel, latence et qualité selon le modèle, l'effort et le volume de tokens.
 - [Parcours](${SITE}/parcours): 4 niveaux, de débutant à expert.
 - [Guide](${SITE}/guide): fiches de référence par fournisseur et par modèle.
-- [Classement](${SITE}/scores): meilleurs scores du quiz.
+- [Classement](${SITE}/scores): meilleurs scores du quiz (déclaratifs, non vérifiés).
+- [Mentions légales](${SITE}/mentions-legales): éditeur, hébergeur, données personnelles.
 - [Code source](https://github.com/gspch/model-quest): MIT, TanStack Start, React 19.
 
 ## Catalogue
