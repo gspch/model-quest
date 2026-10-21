@@ -12,6 +12,7 @@ import {
 import type { ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { JSON_LD } from "../lib/seo";
 import { LangProvider, useLang } from "../lib/i18n";
 import { ThemeProvider } from "../lib/theme";
 
@@ -76,26 +77,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "model.quest : Apprenez à choisir le bon modèle d'IA" },
-      {
-        name: "description",
-        content:
-          "Jeu interactif pour apprendre à choisir provider, modèle et effort de raisonnement d'IA : coût, vitesse, qualité, conformité.",
-      },
       { name: "author", content: "model.quest" },
-      { property: "og:title", content: "model.quest : Quel modèle d'IA choisir ?" },
-      {
-        property: "og:description",
-        content: "Quiz, simulateur et parcours pour maîtriser le choix des modèles d'IA.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#0b0f14" },
+      { name: "color-scheme", content: "dark light" },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { name: "application-name", content: "model.quest" },
     ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(JSON_LD) }],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "alternate", type: "text/plain", href: "/llms.txt", title: "llms.txt" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

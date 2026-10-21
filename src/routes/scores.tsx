@@ -3,25 +3,17 @@ import { useEffect, useState } from "react";
 import { Nav } from "../components/Nav";
 import { Footer } from "../components/Footer";
 import { fetchTopScores, isLeaderboardConfigured, type LeaderboardRow } from "../lib/leaderboard";
+import { seo } from "../lib/seo";
 import { useLang } from "../lib/i18n";
 
 export const Route = createFileRoute("/scores")({
-  head: () => ({
-    meta: [
-      { title: "Classement mondial | model.quest" },
-      {
-        name: "description",
-        content: "Les meilleurs scores du quiz model.quest, sauvegardés en ligne.",
-      },
-      { property: "og:title", content: "Classement mondial : model.quest" },
-      {
-        property: "og:description",
-        content: "Comparez votre score au classement mondial et partagez votre badge.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    seo({
+      path: "/scores",
+      title: "Classement mondial | model.quest",
+      description: "Les meilleurs scores du quiz model.quest, sauvegardés en ligne.",
+      ogTitle: "Classement mondial : model.quest",
+    }),
   component: Scores,
 });
 

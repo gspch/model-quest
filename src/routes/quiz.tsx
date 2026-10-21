@@ -15,6 +15,7 @@ import {
   rankTitle,
   submitScore,
 } from "../lib/leaderboard";
+import { seo } from "../lib/seo";
 import { useLang } from "../lib/i18n";
 import { ProviderLogo } from "../components/ProviderLogo";
 import {
@@ -39,20 +40,14 @@ import {
 } from "../data/models";
 
 export const Route = createFileRoute("/quiz")({
-  head: () => ({
-    meta: [
-      { title: "Quiz : Quel modèle d'IA choisir ? | model.quest" },
-      {
-        name: "description",
-        content:
-          "8 scénarios réels : choisissez le bon provider, le bon modèle et le bon effort de raisonnement, puis comprenez pourquoi plusieurs réponses sont possibles.",
-      },
-      { property: "og:title", content: "Quiz : Quel modèle d'IA choisir ?" },
-      { property: "og:description", content: "Testez votre instinct sur 8 cas d'usage concrets." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    seo({
+      path: "/quiz",
+      title: "Quiz : Quel modèle d'IA choisir ? | model.quest",
+      description:
+        "8 scénarios réels : choisissez le bon provider, le bon modèle et le bon effort de raisonnement, puis comprenez pourquoi plusieurs réponses sont possibles.",
+      ogTitle: "Quiz : Quel modèle d'IA choisir ?",
+    }),
   component: Quiz,
 });
 
@@ -296,7 +291,6 @@ function Quiz() {
                 >
                   <span className="flex items-center gap-2">
                     <ProviderLogo provider={p} size="sm" />
-                    <span className={`font-mono text-[10px] ${p.hue}`}>[{p.badge}]</span>
                   </span>
                   <span className="text-sm font-semibold text-foreground">{p.name}</span>
                   <span className="text-[11px] text-muted-foreground">
@@ -455,7 +449,7 @@ function Quiz() {
                           : "text-destructive"
                     }`}
                   >
-                    [{verdictLabels[choice.verdict]}]
+                    {verdictLabels[choice.verdict]} :
                   </span>{" "}
                   {en ? (enScenario?.notes[choice.modelId] ?? choice.note) : choice.note}
                 </p>

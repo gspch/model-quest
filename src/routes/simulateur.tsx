@@ -1,3 +1,4 @@
+import { ProviderLogo } from "../components/ProviderLogo";
 import { Button } from "../components/ui/button";
 import { PromoBadge } from "../components/PromoBadge";
 import { currentPrice } from "../data/models";
@@ -7,6 +8,7 @@ import { Nav } from "../components/Nav";
 import { Footer } from "../components/Footer";
 import { Gauge } from "../components/Gauge";
 import { ExplainToggle } from "../components/ExplainToggle";
+import { seo } from "../lib/seo";
 import { useLang } from "../lib/i18n";
 import { EN_EFFORTS, EN_MODELS, EN_PROVIDERS } from "../data/en";
 import {
@@ -23,23 +25,14 @@ import {
 } from "../data/models";
 
 export const Route = createFileRoute("/simulateur")({
-  head: () => ({
-    meta: [
-      { title: "Simulateur : Coût, vitesse, qualité | model.quest" },
-      {
-        name: "description",
-        content:
-          "Configurez provider, modèle et effort de raisonnement : visualisez en direct l'impact sur le coût, la latence, la qualité et la conformité.",
-      },
-      { property: "og:title", content: "Simulateur de choix de modèle d'IA" },
-      {
-        property: "og:description",
-        content: "Voyez ce que chaque choix change : coût, latence, qualité, contexte, conformité.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    seo({
+      path: "/simulateur",
+      title: "Simulateur : Coût, vitesse, qualité | model.quest",
+      description:
+        "Configurez provider, modèle et effort de raisonnement : visualisez en direct l'impact sur le coût, la latence, la qualité et la conformité.",
+      ogTitle: "Simulateur de choix de modèle d'IA",
+    }),
   component: Simulateur,
 });
 
@@ -100,6 +93,50 @@ function Simulateur() {
           {/* Configuration */}
           <div className="space-y-5">
             <section className="rounded-xl border border-border bg-card p-5">
+              <div className="flex items-center justify-between">
+                <label htmlFor="monthly-volume" className="font-mono text-xs text-muted-foreground">
+                  {t("sim.volume")}
+                </label>
+                <span className="font-mono text-sm text-primary">{volume}M tokens</span>
+              </div>
+              <input
+                id="monthly-volume"
+                type="range"
+                min={1}
+                max={500}
+                value={volume}
+                onChange={(e) => setVolume(Number(e.target.value))}
+                className="mt-3 w-full accent-[var(--neon)]"
+              />
+              <div className="flex justify-between font-mono text-[10px] text-muted-foreground">
+                <span>1M</span>
+                <span>500M</span>
+              </div>
+            </section>
+            <section className="rounded-xl border border-border bg-card p-5">
+              <div className="flex items-center justify-between gap-2">
+                <label htmlFor="input-share" className="text-sm text-foreground">
+                  {t("sim.inputShare")}
+                </label>
+                <output htmlFor="input-share" className="font-mono text-sm text-primary">
+                  {inputShare}%
+                </output>
+              </div>
+              <input
+                id="input-share"
+                type="range"
+                min={10}
+                max={95}
+                value={inputShare}
+                onChange={(e) => setInputShare(Number(e.target.value))}
+                aria-describedby="input-share-help"
+                className="mt-3 w-full accent-primary"
+              />
+              <p id="input-share-help" className="mt-2 text-xs text-muted-foreground">
+                {t("sim.inputHelp")}
+              </p>
+            </section>
+            <section className="rounded-xl border border-border bg-card p-5">
               <h2 className="font-mono text-xs text-muted-foreground">{t("sim.provider")}</h2>
               <div className="mt-3 flex flex-wrap gap-2">
                 {PROVIDERS.map((p) => (
@@ -121,7 +158,10 @@ function Simulateur() {
                         : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
                     }`}
                   >
-                    [{p.badge}] {p.name}
+                    <span className="flex items-center gap-2">
+                      <ProviderLogo provider={p} size="sm" />
+                      {p.name}
+                    </span>
                   </Button>
                 ))}
               </div>
@@ -191,51 +231,6 @@ function Simulateur() {
                 })}
               </div>
               <p className="mt-2 text-xs text-muted-foreground">{effortSimple(validEffort)}</p>
-            </section>
-
-            <section className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-center justify-between">
-                <label htmlFor="monthly-volume" className="font-mono text-xs text-muted-foreground">
-                  {t("sim.volume")}
-                </label>
-                <span className="font-mono text-sm text-primary">{volume}M tokens</span>
-              </div>
-              <input
-                id="monthly-volume"
-                type="range"
-                min={1}
-                max={500}
-                value={volume}
-                onChange={(e) => setVolume(Number(e.target.value))}
-                className="mt-3 w-full accent-[var(--neon)]"
-              />
-              <div className="flex justify-between font-mono text-[10px] text-muted-foreground">
-                <span>1M</span>
-                <span>500M</span>
-              </div>
-            </section>
-            <section className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-center justify-between gap-2">
-                <label htmlFor="input-share" className="text-sm text-foreground">
-                  {t("sim.inputShare")}
-                </label>
-                <output htmlFor="input-share" className="font-mono text-sm text-primary">
-                  {inputShare}%
-                </output>
-              </div>
-              <input
-                id="input-share"
-                type="range"
-                min={10}
-                max={95}
-                value={inputShare}
-                onChange={(e) => setInputShare(Number(e.target.value))}
-                aria-describedby="input-share-help"
-                className="mt-3 w-full accent-primary"
-              />
-              <p id="input-share-help" className="mt-2 text-xs text-muted-foreground">
-                {t("sim.inputHelp")}
-              </p>
             </section>
           </div>
 

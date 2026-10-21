@@ -6,9 +6,11 @@ export function Footer() {
   const { t } = useLang();
 
   const commands = [
-    { cmd: "leaderboard --global", to: "/scores", explain: t("footer.cmd.scores") },
-    { cmd: "cat /guide/*", to: "/guide", explain: t("footer.cmd.guide") },
+    { cmd: "quiz --start", to: "/quiz", explain: t("footer.cmd.quiz") },
+    { cmd: "simulate --interactive", to: "/simulateur", explain: t("footer.cmd.sim") },
     { cmd: "journey --start", to: "/parcours", explain: t("footer.cmd.journey") },
+    { cmd: "cat /guide/*", to: "/guide", explain: t("footer.cmd.guide") },
+    { cmd: "leaderboard --global", to: "/scores", explain: t("footer.cmd.scores") },
   ] as const;
 
   return (
@@ -34,6 +36,20 @@ export function Footer() {
               <span className="text-[11px] text-muted-foreground/80">: {c.explain}</span>
             </div>
           ))}
+          <div className="flex flex-wrap items-baseline gap-x-3">
+            <a
+              href="https://github.com/gspch/model-quest"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex w-fit items-center gap-2 font-mono text-xs text-muted-foreground transition-colors hover:text-primary"
+            >
+              <span className="text-primary">$</span>
+              <span className="group-hover:underline group-hover:underline-offset-4">
+                git clone gspch/model-quest
+              </span>
+            </a>
+            <span className="text-[11px] text-muted-foreground/80">: {t("footer.cmd.source")}</span>
+          </div>
         </nav>
         <p className="mt-4 border-t border-border/40 pt-3 text-center font-mono text-[10px] text-muted-foreground/70">
           model.quest · {t("catalogue.notice")}

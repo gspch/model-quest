@@ -6,27 +6,18 @@ import { Typewriter } from "../components/Typewriter";
 import { loadScores, type ScoreState } from "../lib/scores";
 import { MODELS, PROVIDERS, UPCOMING_MODELS } from "../data/models";
 import { formatDataDate } from "../data/sources";
+import { seo } from "../lib/seo";
 import { useLang } from "../lib/i18n";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "model.quest : Apprenez à choisir le bon modèle d'IA" },
-      {
-        name: "description",
-        content:
-          "Un jeu interactif pour apprendre à choisir entre OpenAI, Google, Anthropic, DeepSeek, Mistral, Meta, Alibaba et Cohere : quel provider, quel modèle, quel effort de raisonnement, et pourquoi.",
-      },
-      { property: "og:title", content: "model.quest : Quel modèle d'IA choisir ?" },
-      {
-        property: "og:description",
-        content:
-          "Quiz, simulateur et parcours progressif pour maîtriser le choix des modèles d'IA : coût, vitesse, qualité, conformité.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    seo({
+      path: "/",
+      title: "model.quest : Apprenez à choisir le bon modèle d'IA",
+      description:
+        "Un jeu interactif pour apprendre à choisir entre OpenAI, Google, Anthropic, DeepSeek, Mistral, Meta, Alibaba et Cohere : quel provider, quel modèle, quel effort de raisonnement, et pourquoi.",
+      ogTitle: "model.quest : Quel modèle d'IA choisir ?",
+    }),
   component: Home,
 });
 

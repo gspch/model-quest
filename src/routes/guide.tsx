@@ -13,28 +13,19 @@ import {
   upcomingOfProvider,
 } from "../data/models";
 import { EN_EFFORTS, EN_GLOSSARY, EN_PROVIDERS } from "../data/en";
+import { seo } from "../lib/seo";
 import { useLang } from "../lib/i18n";
 import { PROVIDER_PRICING_URLS } from "../data/sources";
 
 export const Route = createFileRoute("/guide")({
-  head: () => ({
-    meta: [
-      { title: "Guide des providers et modèles d'IA | model.quest" },
-      {
-        name: "description",
-        content:
-          "Fiches de référence : OpenAI, Google, Anthropic, DeepSeek, Mistral, Meta, Alibaba, Cohere. Forces, faiblesses, prix indicatifs, contexte, capacités et conformité.",
-      },
-      { property: "og:title", content: "Guide des modèles d'IA : model.quest" },
-      {
-        property: "og:description",
-        content:
-          "Toutes les fiches pour choisir provider, modèle et effort en connaissance de cause.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    seo({
+      path: "/guide",
+      title: "Guide des providers et modèles d'IA | model.quest",
+      description:
+        "Fiches de référence : OpenAI, Google, Anthropic, DeepSeek, Mistral, Meta, Alibaba, Cohere. Forces, faiblesses, prix indicatifs, contexte, capacités et conformité.",
+      ogTitle: "Guide des modèles d'IA : model.quest",
+    }),
   component: Guide,
 });
 
@@ -77,9 +68,6 @@ function Guide() {
                     <span className="whitespace-nowrap font-mono text-sm font-semibold text-foreground">
                       {p.name}
                     </span>
-                    <span className={`font-mono text-[10px] uppercase tracking-wider ${p.hue}`}>
-                      [{p.badge}]
-                    </span>
                   </a>
                 ))}
               </div>
@@ -96,7 +84,6 @@ function Guide() {
                 <div className="rounded-xl border border-border bg-card p-6">
                   <div className="flex flex-wrap items-center gap-3">
                     <ProviderLogo provider={p} size="lg" />
-                    <span className={`font-mono text-sm font-bold ${p.hue}`}>[{p.badge}]</span>
                     <h2 className="text-2xl font-bold text-foreground">{p.name}</h2>
                     <span className="text-sm text-muted-foreground">
                       {enP?.tagline ?? p.tagline}
